@@ -1,0 +1,13 @@
+{
+  "name": "samsung-tv-launcher",
+  "version": "0.1.0",
+  "description": "A minimal home screen for Samsung Tizen TVs that launches the native apps you actually use.",
+  "packageType": "app",
+  "appName": "My Home",
+  "appPath": "app/index.html",
+  "serviceFile": "service/service.js",
+  "keys": ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Return"],
+  "main": "app/main.js",
+  "author": "dayltan-sudo",
+  "license": "MIT"
+}

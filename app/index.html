@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>My Home</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%;
+    background: #0b0d10; color: #e8eaed;
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    overflow: hidden;
+    user-select: none;
+  }
+  #wrap { padding: 6vh 6vw 4vh 6vw; height: 100%; display: flex; flex-direction: column; }
+  #clock { font-size: 3.2vh; letter-spacing: .04em; color: #7d8590; margin-bottom: .6vh; }
+  #greet { font-size: 5.2vh; font-weight: 600; margin-bottom: 5vh; letter-spacing: -.01em; }
+  #grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2.2vh 1.6vw; flex: 1;
+    grid-auto-rows: 1fr;
+  }
+  .tile {
+    position: relative; border-radius: 1.4vh; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2.4vh 1.6vw; cursor: pointer;
+    border: .35vh solid transparent;
+    transition: transform .12s ease, border-color .12s ease;
+    background: #16191d;
+  }
+  .tile .name { font-size: 3.2vh; font-weight: 600; letter-spacing: -.01em; }
+  .tile .sub { font-size: 1.7vh; color: rgba(255,255,255,.62); margin-top: .5vh; }
+  .tile .badge {
+    position: absolute; top: 1.6vh; right: 1.4vw;
+    font-size: 1.6vh; padding: .5vh 1vh; border-radius: 999px;
+    background: rgba(0,0,0,.35); color: rgba(255,255,255,.75);
+  }
+  .tile.focused { border-color: #fff; transform: scale(1.035); }
+  .tile.focused::after {
+    content: ""; position: absolute; inset: 0;
+    box-shadow: inset 0 0 0 .35vh #fff, 0 1.2vh 4vh rgba(0,0,0,.55);
+    border-radius: 1.4vh; pointer-events: none;
+  }
+  .tile.missing { opacity: .45; }
+  .tile.launching { opacity: .75; }
+  #status {
+    margin-top: 3vh; min-height: 3vh; font-size: 1.9vh; color: #7d8590;
+    white-space: pre-wrap; max-height: 22vh; overflow: auto;
+  }
+  #status.err { color: #ff8f8f; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="clock"></div>
+  <div id="greet">My Home</div>
+  <div id="grid"></div>
+  <div id="status"></div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
