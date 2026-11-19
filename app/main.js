@@ -65,7 +65,7 @@
         sub.textContent = a.version ? 'installed ' + a.version : 'installed';
       } else {
         t.classList.add('missing');
-        sub.textContent = 'app id not found';
+        sub.textContent = a.error ? ('error: ' + a.error) : 'app id not found';
       }
     });
   }
@@ -73,14 +73,28 @@
   function resolve() {
     status('Checking installed apps...');
     fetch(SERVICE + '/resolve').then(function (r) { return r.json(); }).then(function (data) {
+      if (data._error) { status('Service reports: ' + data._error, true); return diagnose(); }
+      delete data._error;
       state.apps = data;
       paint();
       var missing = order.filter(function (k) { return data[k] && !data[k].found; });
-      if (missing.length) status('Not found: ' + missing.join(', ') + '\nTap a missing tile for details.');
+      var found = order.filter(function (k) { return data[k] && data[k].found; });
+      if (!found.length) { status('No app could be checked. Running diagnostics...', true); return diagnose(); }
+      if (missing.length) status('Not found: ' + missing.join(', '));
       else status('');
     }).catch(function (e) {
       status('Could not reach the launcher service on 127.0.0.1:8099\n' + e, true);
     });
+  }
+
+  function diagnose() {
+    fetch(SERVICE + '/diag').then(function (r) { return r.json(); }).then(function (d) {
+      var lines = ['device ip: ' + (d.deviceIp || 'unknown')];
+      (d.attempts || []).forEach(function (a) {
+        lines.push(a.host + a.path + ' -> ' + (a.ok ? ('HTTP ' + a.status) : (a.error || 'failed')));
+      });
+      status(lines.join('\n'), true);
+    }).catch(function (e) { status('Diagnostics failed: ' + e, true); });
   }
 
   function launch() {
@@ -118,6 +132,14 @@
 
   function onKey(e) {
     var k = e.key || '';
+    // Tizen sends the remote's Back key as keyCode 10009.
+    if (e.keyCode === 10009 || k === 'XF86Back' || k === 'GoBack' || k === 'BrowserBack') {
+      // TizenBrew opened this page with location.href, so history.back()
+      // returns to its own module list.
+      try { window.history.back(); } catch (err) {}
+      e.preventDefault();
+      return;
+    }
     if (k === 'ArrowLeft') { move(-1, 0); e.preventDefault(); }
     else if (k === 'ArrowRight') { move(1, 0); e.preventDefault(); }
     else if (k === 'ArrowUp') { move(0, -1); e.preventDefault(); }

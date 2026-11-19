@@ -1,6 +1,6 @@
 {
   "name": "samsung-tv-launcher",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A minimal home screen for Samsung Tizen TVs that launches the native apps you actually use.",
   "packageType": "app",
   "appName": "My Home",
